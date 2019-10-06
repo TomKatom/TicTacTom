@@ -48,18 +48,16 @@ namespace TicTacToeTom
         private void CheckWin()
         {
             int i = 0, j = 0, XInARow = 0, OInARow = 0;
-            bool won = false;
-            for (j = 0; j < 3 && won == false; j++)
+            /*Rows*/
+            for (j = 0; j < 3; j++)
             {
                 if (XInARow == 3)
                 {
-                    this.buttons[4].Text = "zz";
-                    won = true;
+                    buttons[4].Text = "zz";
                 }
                 else if (OInARow == 3)
                 {
-                    this.buttons[4].Text = "yy";
-                    won = true;
+                    buttons[4].Text = "yy";
                 }
                 XInARow = 0;
                 OInARow = 0;
@@ -75,17 +73,16 @@ namespace TicTacToeTom
                     }
                 }
             }
-            for (i = 0; i < 3 && won == false; i++)
+            /*Columns*/
+            for (i = 0; i < 3; i++)
             {
                 if (XInARow == 3)
                 {
-                    this.buttons[4].Text = "zz";
-                    won = true;
+                    buttons[4].Text = "zz";
                 }
                 else if (OInARow == 3)
                 {
-                    this.buttons[4].Text = "yy";
-                    won = true;
+                    buttons[4].Text = "yy";
                 }
                 XInARow = 0;
                 OInARow = 0;
@@ -101,17 +98,16 @@ namespace TicTacToeTom
                     }
                 }
             }
-            for (i = 0, j = 0; i < 3 && won == false; i++, j++)
+            /*Main Diagnoal*/
+            for (i = 0, j = 0; i < 3; i++, j++)
             {
                 if (XInARow == 3)
                 {
-                    this.buttons[4].Text = "zz";
-                    won = true;
+                    buttons[4].Text = "zz";
                 }
                 else if (OInARow == 3)
                 {
-                    this.buttons[4].Text = "yy";
-                    won = true;
+                    buttons[4].Text = "yy";
                 }
                 if (board[i,j] == 'X')
                 {
@@ -124,7 +120,8 @@ namespace TicTacToeTom
             }
             OInARow = 0;
             XInARow = 0;
-            for (i = 3 - 1, j = 0; j < 3 && won == false; i--, j++)
+            /*Secondary Diagnoal*/
+            for (i = 3 - 1, j = 0; j < 3; i--, j++)
             {
                 if (board[i,j] == 'X')
                 {
@@ -136,13 +133,12 @@ namespace TicTacToeTom
                 }
                 if (XInARow == 3)
                 {
-                    this.buttons[4].Text = "zz";
-                    won = true;
+                    buttons[4].Text = "zz";
                 }
                 else if (OInARow == 3)
                 {
-                    this.buttons[4].Text = "yy";
-                    won = true;
+                    buttons[4].Text = "yy";
+
                 }
             }
         }
