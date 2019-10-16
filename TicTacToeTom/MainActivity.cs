@@ -10,299 +10,100 @@ namespace TicTacToeTom
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        //Tic Tac Tom
-        private Button[] buttons;
-        private int count;
-        private char[,] board;
+        private Button[][] buttons = new Button[3][];
+        // false - O turn, true - X turn
+        private bool currentQueuePlayer = true;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
-            buttons = new Button[9];
-            count = 0;
-            board = new char[3,3];
-            buttons[0] = FindViewById<Button>(Resource.Id.but1);
-            buttons[1] = FindViewById<Button>(Resource.Id.but2);
-            buttons[2] = FindViewById<Button>(Resource.Id.but3);
-            buttons[3] = FindViewById<Button>(Resource.Id.but4);
-            buttons[4] = FindViewById<Button>(Resource.Id.but5);
-            buttons[5] = FindViewById<Button>(Resource.Id.but6);
-            buttons[6] = FindViewById<Button>(Resource.Id.but7);
-            buttons[7] = FindViewById<Button>(Resource.Id.but8);
-            buttons[8] = FindViewById<Button>(Resource.Id.but9);
+            buttons[0] = new Button[3];
+            buttons[1] = new Button[3];
+            buttons[2] = new Button[3];
+            buttons[0][0] = FindViewById<Button>(Resource.Id.but1);
+            buttons[0][1] = FindViewById<Button>(Resource.Id.but2);
+            buttons[0][2] = FindViewById<Button>(Resource.Id.but3);
+            buttons[1][0] = FindViewById<Button>(Resource.Id.but4);
+            buttons[1][1] = FindViewById<Button>(Resource.Id.but5);
+            buttons[1][2] = FindViewById<Button>(Resource.Id.but6);
+            buttons[2][0] = FindViewById<Button>(Resource.Id.but7);
+            buttons[2][1] = FindViewById<Button>(Resource.Id.but8);
+            buttons[2][2] = FindViewById<Button>(Resource.Id.but9);
 
-            buttons[0].Click += OnBut1;
-            buttons[1].Click += OnBut2;
-            buttons[2].Click += OnBut3;
-            buttons[3].Click += OnBut4;
-            buttons[4].Click += OnBut5;
-            buttons[5].Click += OnBut6;
-            buttons[6].Click += OnBut7;
-            buttons[7].Click += OnBut8;
-            buttons[8].Click += OnBut9;
-
-        }
-        
-        private void CheckWin()
-        {
-            int i = 0, j = 0, XInARow = 0, OInARow = 0;
-            /*Rows*/
-            for (j = 0; j < 3; j++)
-            {
-                if (XInARow == 3)
-                {
-                    buttons[4].Text = "zz";
+            for (int x = 0; x < buttons.Length; x++) {
+                for (int y = 0; y < buttons[0].Length; y++) {
+                    buttons[x][y].Click += MyButtonClick;
                 }
-                else if (OInARow == 3)
-                {
-                    buttons[4].Text = "yy";
-                }
-                XInARow = 0;
-                OInARow = 0;
-                for (i = 0; i < 3; i++)
-                {
-                    if (board[i,j] == 'X')
-                    {
-                        XInARow++;
-                    }
-                    if (board[i,j] == 'O')
-                    {
-                        OInARow++;
-                    }
-                }
-            }
-            /*Columns*/
-            for (i = 0; i < 3; i++)
-            {
-                if (XInARow == 3)
-                {
-                    buttons[4].Text = "zz";
-                }
-                else if (OInARow == 3)
-                {
-                    buttons[4].Text = "yy";
-                }
-                XInARow = 0;
-                OInARow = 0;
-                for (j = 0; j < 3; j++)
-                {
-                    if (board[i,j] == 'X')
-                    {
-                        XInARow++;
-                    }
-                    if (board[i,j] == 'O')
-                    {
-                        OInARow++;
-                    }
-                }
-            }
-            /*Main Diagnoal*/
-            for (i = 0, j = 0; i < 3; i++, j++)
-            {
-                if (XInARow == 3)
-                {
-                    buttons[4].Text = "zz";
-                }
-                else if (OInARow == 3)
-                {
-                    buttons[4].Text = "yy";
-                }
-                if (board[i,j] == 'X')
-                {
-                    XInARow++;
-                }
-                if (board[i,j] == 'O')
-                {
-                    OInARow++;
-                }
-            }
-            OInARow = 0;
-            XInARow = 0;
-            /*Secondary Diagnoal*/
-            for (i = 3 - 1, j = 0; j < 3; i--, j++)
-            {
-                if (board[i,j] == 'X')
-                {
-                    XInARow++;
-                }
-                if (board[i,j] == 'O')
-                {
-                    OInARow++;
-                }
-                if (XInARow == 3)
-                {
-                    buttons[4].Text = "zz";
-                }
-                else if (OInARow == 3)
-                {
-                    buttons[4].Text = "yy";
-
-                }
-            }
-        }
-        private void OnBut9(object sender, EventArgs e)
-        {
-            if(this.count % 2 == 0 && buttons[8].Text == "")
-            {
-                this.buttons[8].Text = "X";
-                this.count++;
-                board[2,2] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[8].Text == "")
-            {
-                this.buttons[8].Text = "O";
-                this.count++;
-                this.board[2,2] = 'O';
-                CheckWin();
             }
 
+            ResetGame();
         }
 
-        private void OnBut8(object sender, EventArgs e)
+        private void MyButtonClick(object sender, EventArgs e)
         {
-            if (this.count % 2 == 0 && buttons[7].Text == "")
-            {
-                this.buttons[7].Text = "X";
-                this.count++;
-                this.board[2,1] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[7].Text == "")
-            {
-                this.buttons[7].Text = "O";
-                this.count++;
-                this.board[2,1] = 'O';
-                CheckWin();
+            if ((sender as Button).Text != "") return;
+            if (currentQueuePlayer) {
+                (sender as Button).Text = "X";
+                CheckVictory();
+                currentQueuePlayer = false;
+            } else {
+                (sender as Button).Text = "O";
+                CheckVictory();
+                currentQueuePlayer = true;
             }
         }
 
-        private void OnBut7(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[6].Text == "")
-            {
-                this.buttons[6].Text = "X";
-                this.count++;
-                this.board[2,0] = 'X';
-                CheckWin();
+        private void CheckVictory() {
+            for (int x = 0; x < buttons.Length; x++) {
+                if(buttons[x][0].Text == buttons[x][1].Text && buttons[x][1].Text == buttons[x][2].Text && buttons[x][0].Text != "") {
+                    ShowAlert("Victory", "Player " + (currentQueuePlayer ? "X" : "O"));
+                    //buttons[x][0].SetBackgroundColor(Android.Graphics.Color.Green);
+                    //buttons[x][1].SetBackgroundColor(Android.Graphics.Color.Green);
+                    //buttons[x][2].SetBackgroundColor(Android.Graphics.Color.Green);
+                    return;
+                }
             }
-            else if (this.count % 2 != 0 && buttons[6].Text == "")
-            {
-                this.buttons[6].Text = "O";
-                this.count++;
-                this.board[2,0] = 'O';
-                CheckWin();
+
+            for (int y = 0; y < buttons.Length; y++) {
+                if (buttons[0][y].Text == buttons[1][y].Text && buttons[1][y].Text == buttons[2][y].Text && buttons[0][y].Text != "") {
+                    ShowAlert("Victory", "Player " + (currentQueuePlayer ? "X" : "O"));
+                    //buttons[0][y].SetBackgroundColor(Android.Graphics.Color.Green);
+                    //buttons[1][y].SetBackgroundColor(Android.Graphics.Color.Green);
+                    //buttons[2][y].SetBackgroundColor(Android.Graphics.Color.Green);
+                    return;
+                }
             }
+
+            if (buttons[0][0].Text == buttons[1][1].Text && buttons[1][1].Text == buttons[2][2].Text && buttons[0][0].Text != "") {
+                ShowAlert("Victory", "Player " + (currentQueuePlayer ? "X" : "O"));
+                return;
+            }
+
+            if (buttons[2][0].Text == buttons[1][1].Text && buttons[1][1].Text == buttons[0][2].Text && buttons[2][0].Text != "") {
+                ShowAlert("Victory", "Player " + (currentQueuePlayer ? "X" : "O"));
+                return;
+            }
+
+            // All buttons already pressed
+            bool allClicked = true;
+            for (int x = 0; x < buttons.Length; x++)
+                for (int y = 0; y < buttons[0].Length; y++)
+                    if (buttons[x][y].Text == "")
+                        allClicked = false;
+
+            if(allClicked)
+                ShowAlert("All of them - Losers", "");
+
         }
 
-        private void OnBut6(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[5].Text == "")
-            {
-                this.buttons[5].Text = "X";
-                this.count++;
-                this.board[1,2] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[5].Text == "")
-            {
-                this.buttons[5].Text = "O";
-                this.count++;
-                this.board[1,2] = 'O';
-                CheckWin();
-            }
-        }
-
-        private void OnBut5(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[4].Text == "")
-            {
-                this.buttons[4].Text = "X";
-                this.count++;
-                this.board[1,1] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[4].Text == "")
-            {
-                this.buttons[4].Text = "O";
-                this.count++;
-                this.board[1,1] = 'O';
-                CheckWin();
-            }
-        }
-
-        private void OnBut4(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[3].Text == "")
-            {
-                this.buttons[3].Text = "X";
-                this.count++;
-                this.board[1,0] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[3].Text == "")
-            {
-                this.buttons[3].Text = "O";
-                this.count++;
-                this.board[1,0] = 'O';
-                CheckWin();
-            }
-        }
-
-        private void OnBut3(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[2].Text == "")
-            {
-                this.buttons[2].Text = "X";
-                this.count++;
-                this.board[0,2] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[2].Text == "")
-            {
-                this.buttons[2].Text = "O";
-                this.count++;
-                this.board[0,2] = 'O';
-                CheckWin();
-            }
-        }
-
-        private void OnBut2(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[1].Text == "")
-            {
-                this.buttons[1].Text = "X";
-                this.count++;
-                this.board[0,1] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[1].Text == "")
-            {
-                this.buttons[1].Text = "O";
-                this.count++;
-                this.board[0,1] = 'O';
-                CheckWin();
-            }
-        }
-
-        private void OnBut1(object sender, EventArgs e)
-        {
-            if (this.count % 2 == 0 && buttons[0].Text == "")
-            {
-                this.buttons[0].Text = "X";
-                this.count++;
-                this.board[0,0] = 'X';
-                CheckWin();
-            }
-            else if (this.count % 2 != 0 && buttons[0].Text == "")
-            {
-                this.buttons[0].Text = "O";
-                this.count++;
-                this.board[0,0] = 'O';
-                CheckWin();
-            }
+        private void ResetGame() {
+            for (int x = 0; x < buttons.Length; x++)
+                for (int y = 0; y < buttons[0].Length; y++) {
+                    buttons[x][y].Text = "";
+                    currentQueuePlayer = true;
+                }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -310,6 +111,15 @@ namespace TicTacToeTom
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        private void ShowAlert(string title, string body) {
+            Android.App.AlertDialog.Builder alert = new Android.App.AlertDialog.Builder(this);
+            alert.SetTitle(title);
+            alert.SetMessage(body);
+            alert.SetPositiveButton("OK", (senderAlert, args) => { });
+            Dialog dialog = alert.Create();
+            dialog.Show();
         }
     }
 }
